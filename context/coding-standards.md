@@ -4,7 +4,7 @@
 
 - Strict mode enabled
 - No `any` types - use proper typing or `unknown`
-- Define interfaces for all props, API responses, and data models
+- Define types for all props, API responses, and data models
 - Use type inference where obvious, explicit types where helpful
 
 ## React
@@ -46,7 +46,7 @@ Example v4 configuration:
 @theme {
   --color-primary: oklch(50% 0.2 250);
 }
-
+```
 ## File Organization
 
 - Components: `src/components/[feature]/ComponentName.tsx`

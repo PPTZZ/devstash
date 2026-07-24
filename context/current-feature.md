@@ -1,19 +1,21 @@
 # Current Feature
-Project Initialization & Initial Setup
+Dashboard UI Phase 1
 
 ## Status
 Completed
 
 ## Goals
-- Initialize Next.js project with Tailwind CSS and TypeScript
-- Set up project structure, configuration files, and package management (`pnpm`)
-- Initialize Git repository, configure remote, and push initial commit to GitHub
 
 ## Notes
-- Repository initialized and linked to `git@github.com:PPTZZ/devstash.git`
-- Uses Next.js (App Router), Tailwind CSS v4, PostCSS, and ESLint
 
 ## History
 - Initialized Next.js project structure with Tailwind CSS, TypeScript, and PostCSS configuration.
 - Configured project dependencies and package management using `pnpm`.
 - Initialized local Git repository, created initial commit (`chore: initial next.js and tailwind setup`), added GitHub remote `origin`, and successfully pushed `master` branch.
+- Created mock data structure at `src/lib/mock-data.ts` containing items, collections, item types, and current user.
+- Switched to `feature/dashboard-ui-phase-1` branch.
+- Initialized ShadCN UI with Tailwind CSS v4 support, Lucide icons, and default dark mode.
+- Installed ShadCN UI components (`button`, `input`).
+- Created `TopBar` header component with search bar (⌘K badge) and action buttons, moved search to center, and added DevStash brand logo on the left.
+- Created `/dashboard` route with `DashboardLayout` containing top bar, sidebar (`Sidebar`), and main content (`Main`) placeholders.
+- Verified build and lint test cleanly.
