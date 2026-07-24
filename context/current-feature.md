@@ -1,21 +1,16 @@
 # Current Feature
-Dashboard UI Phase 1
+Dashboard UI Phase 2
 
 ## Status
-Completed
 
 ## Goals
 
 ## Notes
 
 ## History
-- Initialized Next.js project structure with Tailwind CSS, TypeScript, and PostCSS configuration.
-- Configured project dependencies and package management using `pnpm`.
-- Initialized local Git repository, created initial commit (`chore: initial next.js and tailwind setup`), added GitHub remote `origin`, and successfully pushed `master` branch.
-- Created mock data structure at `src/lib/mock-data.ts` containing items, collections, item types, and current user.
-- Switched to `feature/dashboard-ui-phase-1` branch.
-- Initialized ShadCN UI with Tailwind CSS v4 support, Lucide icons, and default dark mode.
-- Installed ShadCN UI components (`button`, `input`).
-- Created `TopBar` header component with search bar (⌘K badge) and action buttons, moved search to center, and added DevStash brand logo on the left.
-- Created `/dashboard` route with `DashboardLayout` containing top bar, sidebar (`Sidebar`), and main content (`Main`) placeholders.
-- Verified build and lint test cleanly.
+- Switched to `feature/dashboard-ui-phase-2` branch.
+- Implemented `SidebarContext` provider to handle responsive sidebar states (collapsible desktop view and overlay mobile drawer).
+- Updated `TopBar` to toggle sidebar state on `PanelLeft` button click.
+- Built full `Sidebar` component rendering item types with Lucide icons and item counts, favorite collections with star badges, recent collections with counts, and user profile card pinned at bottom.
+- Added dynamic item type routes `/items/[type]` and collection routes `/collections/[id]`.
+- Verified production build (`pnpm build`) and linting (`pnpm lint`) cleanly.

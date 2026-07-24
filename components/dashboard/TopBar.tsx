@@ -1,9 +1,14 @@
+"use client";
+
 import React from "react";
 import { Search, Plus, PanelLeft, FolderPlus, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useSidebar } from "@/components/dashboard/SidebarContext";
 
 export function TopBar() {
+  const { toggleSidebar } = useSidebar();
+
   return (
     <header className="sticky top-0 z-30 flex h-14 w-full items-center justify-between border-b border-border/40 bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       {/* Left Section: Sidebar Toggle & Brand Logo */}
@@ -13,6 +18,7 @@ export function TopBar() {
           size="icon"
           className="h-8 w-8 text-muted-foreground hover:text-foreground"
           aria-label="Toggle Sidebar"
+          onClick={toggleSidebar}
         >
           <PanelLeft className="h-4 w-4" />
         </Button>
