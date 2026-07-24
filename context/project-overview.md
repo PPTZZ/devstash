@@ -62,6 +62,13 @@ DevStash provides **7 standard system types** out of the box. Types dictate visu
 | **File** | File | `File` | `#6b7280` (Gray) | `/items/files` | **Pro Only** | Spec sheets, PDF guides, context configuration files. |
 | **Image** | File | `Image` | `#ec4899` (Pink) | `/items/images` | **Pro Only** | Screenshots, UI wireframes, architecture diagrams. |
 
+### Screenshots
+
+Refer to the screenshots below as a base for the dashboard UI. It does not have to be exact, use it as a reference.
+
+- @context/screenshots/dashboard-ui-drawer.png
+- @context/screenshots/dashboard-ui-main.png
+
 ---
 
 ## 🗄️ Database Architecture & Prisma Schema
