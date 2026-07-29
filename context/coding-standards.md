@@ -49,8 +49,8 @@ Example v4 configuration:
 ```
 ## File Organization
 
-- Components: `src/components/[feature]/ComponentName.tsx`
-- Pages: `src/app/[route]/page.tsx`
+- Components: `components/[feature]/ComponentName.tsx`
+- Pages: `app/[route]/page.tsx`
 - Server Actions: `src/actions/[feature].ts`
 - Types: `src/types/[feature].ts`
 - Lib/Utils: `src/lib/[utility].ts`
