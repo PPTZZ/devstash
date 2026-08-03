@@ -1,12 +1,22 @@
-[//]: # (After the status is changed to complete leave only the Current Feature, Status and History sections populated. The Goals and the Notes can be cleard)
+[//]: # (Never delete the section titles or the comments that explain each section.)
+[//]: # (After the status is changed to complete leave only the Current Feature, Status and History sections populated. The content Goals and the Notes can be cleard excepring the descriptive comments.)
 
-# Current Feature
-Dashboard UI Phase 3 - Main Area Layout & Dashboard Overview
+## Current Feature
+[//]: # (Feature name and short description)
+Prisma + Neon PostgreSQL Setup - Set up Prisma ORM with Neon PostgreSQL database.
 
 ## Status
+[//]: # (Not started | In Progress | Complete)
 Complete
 
+## Goals
+[//]: # (Goals and requirements)
+
+## Notes
+[//]: # (Any extra notes)
+
 ## History
+[//]: # (Keep this updated. Earliest to latest)
 - Switched to `feature/dashboard-ui-phase-2` branch.
 - Implemented `SidebarContext` provider to handle responsive sidebar states (collapsible desktop view and overlay mobile drawer).
 - Updated `TopBar` to toggle sidebar state on `PanelLeft` button click.
@@ -23,3 +33,16 @@ Complete
 - Created `app/collections/page.tsx` for full collections listing view.
 - Extended `src/lib/mock-data.ts` with 10 total items to satisfy recent items spec.
 - Verified ESLint (`pnpm lint`) with 0 errors and 0 warnings.
+- Added Prisma + Neon PostgreSQL Setup spec to `current-feature.md`.
+- Created and checked out feature branch `feature/prisma-neon-setup`.
+- Installed Prisma 7 packages (`prisma@7.9.1`, `@prisma/client`, `@prisma/adapter-neon`, `@neondatabase/serverless`, `ws`).
+- Defined complete data model schema in `prisma/schema.prisma` using `provider = "prisma-client"`.
+- Created `prisma.config.ts` using `defineConfig` for connection configuration.
+- Instantiated database client singleton in `src/lib/db.ts` using `@prisma/adapter-neon` and WebSocket configuration.
+- Generated Prisma Client to `src/generated/prisma`.
+- Created `.env` and `.env.example` templates for database connection URLs.
+- Added database CLI scripts (`db:generate`, `db:migrate`, `db:deploy`, `db:studio`) to `package.json`.
+- Approved pnpm build scripts and verified `npx tsc --noEmit`, `pnpm lint`, and `pnpm build` with 0 errors.
+- Executed `pnpm db:migrate --name init`, creating initial migration `20260803081919_init` and verifying `prisma migrate status` is in sync.
+- Created `prisma/seed.ts` mapping `src/lib/mock-data.ts` records into database tables and configured seed script in `prisma.config.ts`.
+- Executed `pnpm db:seed` successfully populating the user, system item types, collections, items, tags, and item-collection join records.

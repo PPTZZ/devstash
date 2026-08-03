@@ -1,0 +1,190 @@
+datasource db {
+  provider = "postgresql"
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+enum ContentType {
+  TEXT
+  FILE
+  URL
+}
+
+enum SubscriptionTier {
+  FREE
+  PRO
+}
+
+model User {
+  id                     String           @id @default(cuid())
+  name                   String?
+  email                  String?          @unique
+  emailVerified          DateTime?
+  image                  String?
+  passwordHash           String?
+
+  // Stripe & Monetization
+  isPro                  Boolean          @default(false)
+  tier                   SubscriptionTier @default(FREE)
+  stripeCustomerId       String?          @unique
+  stripeSubscriptionId   String?          @unique
+  stripePriceId          String?
+  stripeCurrentPeriodEnd DateTime?
+
+  // Relations
+  accounts               Account[]
+  sessions               Session[]
+  items                  Item[]
+  collections            Collection[]
+  itemTypes              ItemType[]
+
+  createdAt              DateTime         @default(now())
+  updatedAt              DateTime         @updatedAt
+
+  @@index([email])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model ItemType {
+  id        String   @id @default(cuid())
+  name      String   // e.g. "Snippet", "Prompt", "Command"
+  slug      String   // e.g. "snippet", "prompt"
+  icon      String   // Lucide icon key
+  color     String   // Hex code, e.g. "#3b82f6"
+  isSystem  Boolean  @default(true)
+  isProOnly Boolean  @default(false)
+
+  userId    String?  // null for system types, populated for custom user types
+  user      User?    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items     Item[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([userId, slug])
+  @@index([userId])
+}
+
+model Item {
+  id          String      @id @default(cuid())
+  title       String
+  contentType ContentType @default(TEXT)
+  content     String?     @db.Text // Markdown text, prompt string, code, or command
+  url         String?     @db.Text // Target URL for link types
+  fileUrl     String?     @db.Text // Cloudflare R2 bucket public/presigned URL
+  fileName    String?
+  fileSize    Int?        // Size in bytes
+  description String?     @db.Text
+  language    String?     // e.g. "typescript", "python", "bash"
+
+  isFavorite  Boolean     @default(false)
+  isPinned    Boolean     @default(false)
+
+  userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  itemTypeId  String
+  itemType    ItemType    @relation(fields: [itemTypeId], references: [id])
+
+  collections ItemCollection[]
+  tags        ItemTag[]
+
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@index([userId])
+  @@index([itemTypeId])
+  @@index([isFavorite])
+  @@index([isPinned])
+}
+
+model Collection {
+  id            String   @id @default(cuid())
+  name          String
+  description   String?  @db.Text
+  isFavorite    Boolean  @default(false)
+  defaultTypeId String?
+
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  items         ItemCollection[]
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([userId])
+}
+
+model ItemCollection {
+  itemId       String
+  collectionId String
+  addedAt      DateTime @default(now())
+
+  item         Item       @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  collection   Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@id([itemId, collectionId])
+  @@index([collectionId])
+  @@index([itemId])
+}
+
+model Tag {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  items     ItemTag[]
+
+  createdAt DateTime  @default(now())
+}
+
+model ItemTag {
+  itemId String
+  tagId  String
+
+  item   Item @relation(fields: [itemId], references: [id], onDelete: Cascade)
+  tag    Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([itemId, tagId])
+  @@index([tagId])
+  @@index([itemId])
+}
