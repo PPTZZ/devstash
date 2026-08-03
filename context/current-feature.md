@@ -1,9 +1,9 @@
 [//]: # (Never delete the section titles or the comments that explain each section.)
-[//]: # (After the status is changed to complete leave only the Current Feature, Status and History sections populated. The content Goals and the Notes can be cleard excepring the descriptive comments.)
+[//]: # (After the status is changed to complete leave only the Current Feature, Status and History sections populated. The content Goals and the Notes can be cleard excepting the descriptive comments.)
 
 ## Current Feature
 [//]: # (Feature name and short description)
-Prisma + Neon PostgreSQL Setup - Set up Prisma ORM with Neon PostgreSQL database.
+Seed Data Specification - Create a seed script (`prisma/seed.ts`) to populate the database with sample data for development and demos.
 
 ## Status
 [//]: # (Not started | In Progress | Complete)
@@ -46,3 +46,8 @@ Complete
 - Executed `pnpm db:migrate --name init`, creating initial migration `20260803081919_init` and verifying `prisma migrate status` is in sync.
 - Created `prisma/seed.ts` mapping `src/lib/mock-data.ts` records into database tables and configured seed script in `prisma.config.ts`.
 - Executed `pnpm db:seed` successfully populating the user, system item types, collections, items, tags, and item-collection join records.
+- Added Seed Data Specification to `current-feature.md`.
+- Created and checked out new Git branch `feature/seed-data-setup`.
+- Installed `bcryptjs` and updated `prisma/seed.ts` to implement full seed specification with `demo@devstash.io` demo user (bcrypt hashed password, 12 rounds), 7 system item types, and 5 detailed sample collections with real URLs.
+- Ran `pnpm db:seed` and verified database output with `pnpm db:test` (1 user, 7 item types, 5 collections, 18 items with tags).
+- Verified `npx tsc --noEmit`, `pnpm lint`, and `pnpm build` cleanly with 0 errors.
