@@ -9,7 +9,7 @@ import {
   Link as LinkIcon,
   LucideProps,
 } from "lucide-react";
-import { itemTypes } from "@/src/lib/mock-data";
+import { itemTypes } from "@/lib/mock-data";
 
 interface ItemTypeIconProps extends LucideProps {
   slug?: string;

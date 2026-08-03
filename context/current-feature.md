@@ -3,7 +3,7 @@
 
 ## Current Feature
 [//]: # (Feature name and short description)
-Seed Data Specification - Create a seed script (`prisma/seed.ts`) to populate the database with sample data for development and demos.
+Dashboard Collections Spec - Replace dummy collection data on dashboard with real Neon database data via Prisma.
 
 ## Status
 [//]: # (Not started | In Progress | Complete)
@@ -50,4 +50,10 @@ Complete
 - Created and checked out new Git branch `feature/seed-data-setup`.
 - Installed `bcryptjs` and updated `prisma/seed.ts` to implement full seed specification with `demo@devstash.io` demo user (bcrypt hashed password, 12 rounds), 7 system item types, and 5 detailed sample collections with real URLs.
 - Ran `pnpm db:seed` and verified database output with `pnpm db:test` (1 user, 7 item types, 5 collections, 18 items with tags).
+- Verified `npx tsc --noEmit`, `pnpm lint`, and `pnpm build` cleanly with 0 errors.
+- Added Dashboard Collections Spec to `current-feature.md`.
+- Created and checked out new Git branch `feature/dashboard-collections`.
+- Created `lib/db/collections.ts` with `getDashboardCollections`, `getAllCollections`, and `getDashboardStats` functions.
+- Updated `app/dashboard/page.tsx` and `app/collections/page.tsx` to fetch collections & stats directly from database in Server Components.
+- Updated `CollectionCard.tsx` and `StatsCards.tsx` using `type` definitions and rendered dynamic border color from dominant item type.
 - Verified `npx tsc --noEmit`, `pnpm lint`, and `pnpm build` cleanly with 0 errors.

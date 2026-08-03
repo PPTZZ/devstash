@@ -1,5 +1,5 @@
 import React from "react";
-import { itemTypes } from "@/src/lib/mock-data";
+import { itemTypes } from "@/lib/mock-data";
 
 export default async function ItemTypePage({
   params,

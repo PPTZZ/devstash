@@ -1,6 +1,6 @@
 import 'dotenv/config';
 import bcrypt from 'bcryptjs';
-import { db } from '../src/lib/db';
+import { db } from '../lib/db';
 
 async function main() {
   console.log('🌱 Starting database seeding per seed-spec.md...');

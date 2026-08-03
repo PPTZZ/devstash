@@ -1,5 +1,5 @@
 import React from "react";
-import { collections } from "@/src/lib/mock-data";
+import { collections } from "@/lib/mock-data";
 
 export default async function CollectionPage({
   params,

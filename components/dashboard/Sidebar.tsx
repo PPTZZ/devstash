@@ -19,7 +19,7 @@ import {
   Layers,
   LucideProps,
 } from "lucide-react";
-import { itemTypes, collections, currentUser, ItemType } from "@/src/lib/mock-data";
+import { itemTypes, collections, currentUser, ItemType } from "@/lib/mock-data";
 import { useSidebar } from "@/components/dashboard/SidebarContext";
 import { cn } from "@/lib/utils";
 

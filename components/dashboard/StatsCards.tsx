@@ -1,14 +1,27 @@
 import React from "react";
 import { FileText, Folder, Star, Bookmark } from "lucide-react";
-import { items, collections } from "@/src/lib/mock-data";
+import { items as mockItems, collections as mockCollections } from "@/lib/mock-data";
 
-export function StatsCards() {
-  const totalItems = items.length;
-  const totalCollections = collections.length;
-  const favoriteItems = items.filter((i) => i.isFavorite).length;
-  const favoriteCollections = collections.filter((c) => c.isFavorite).length;
+export type StatsData = {
+  totalItems: number;
+  totalCollections: number;
+  favoriteItems: number;
+  favoriteCollections: number;
+};
 
-  const stats = [
+type StatsCardsProps = {
+  stats?: StatsData;
+};
+
+export function StatsCards({ stats }: StatsCardsProps) {
+  const totalItems = stats?.totalItems ?? mockItems.length;
+  const totalCollections = stats?.totalCollections ?? mockCollections.length;
+  const favoriteItems =
+    stats?.favoriteItems ?? mockItems.filter((i) => i.isFavorite).length;
+  const favoriteCollections =
+    stats?.favoriteCollections ?? mockCollections.filter((c) => c.isFavorite).length;
+
+  const statItems = [
     {
       label: "Total Items",
       value: totalItems,
@@ -45,7 +58,7 @@ export function StatsCards() {
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-      {stats.map((stat) => {
+      {statItems.map((stat) => {
         const IconComponent = stat.icon;
         return (
           <div

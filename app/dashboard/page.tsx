@@ -1,12 +1,18 @@
 import React from "react";
 import Link from "next/link";
 import { Pin, Clock } from "lucide-react";
-import { items, collections } from "@/src/lib/mock-data";
+import { items } from "@/lib/mock-data";
+import { getDashboardCollections, getDashboardStats } from "@/lib/db/collections";
 import { StatsCards } from "@/components/dashboard/StatsCards";
 import { CollectionCard } from "@/components/dashboard/CollectionCard";
 import { ItemCard } from "@/components/dashboard/ItemCard";
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
+  const [collections, stats] = await Promise.all([
+    getDashboardCollections(6),
+    getDashboardStats(),
+  ]);
+
   const pinnedItems = items.filter((item) => item.isPinned);
   const recentItems = items.slice(0, 10);
 
@@ -24,7 +30,7 @@ export default function DashboardPage() {
 
       {/* 4 Stats Cards */}
       <section aria-label="Dashboard Overview Statistics">
-        <StatsCards />
+        <StatsCards stats={stats} />
       </section>
 
       {/* Collections Section */}
@@ -41,11 +47,17 @@ export default function DashboardPage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {collections.slice(0, 6).map((collection) => (
-            <CollectionCard key={collection.id} collection={collection} />
-          ))}
-        </div>
+        {collections.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-border/60 bg-card/20 p-8 text-center">
+            <p className="text-sm text-muted-foreground">No collections found in database.</p>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {collections.map((collection) => (
+              <CollectionCard key={collection.id} collection={collection} />
+            ))}
+          </div>
+        )}
       </section>
 
       {/* Pinned Items Section */}

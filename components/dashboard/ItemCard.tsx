@@ -1,6 +1,6 @@
 import React from "react";
 import { Pin, Star, ExternalLink, FileText } from "lucide-react";
-import { Item } from "@/src/lib/mock-data";
+import { Item } from "@/lib/mock-data";
 import { ItemTypeIcon } from "@/components/dashboard/ItemTypeIcon";
 
 interface ItemCardProps {

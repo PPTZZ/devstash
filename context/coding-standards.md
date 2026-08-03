@@ -53,7 +53,7 @@ Example v4 configuration:
 - Pages: `app/[route]/page.tsx`
 - Server Actions: `src/actions/[feature].ts`
 - Types: `src/types/[feature].ts`
-- Lib/Utils: `src/lib/[utility].ts`
+- Lib/Utils: `lib/[utility].ts`
 
 ## Naming
 
