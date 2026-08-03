@@ -1,19 +1,68 @@
 import React from "react";
 import { Pin, Star, ExternalLink, FileText } from "lucide-react";
-import { Item } from "@/lib/mock-data";
+import { itemTypes } from "@/lib/mock-data";
 import { ItemTypeIcon } from "@/components/dashboard/ItemTypeIcon";
 
+export type ItemCardData = {
+  id: string;
+  title: string;
+  description?: string | null;
+  contentType?: "TEXT" | "FILE" | "URL";
+  content?: string | null;
+  url?: string | null;
+  fileUrl?: string | null;
+  fileName?: string | null;
+  fileSize?: number | null;
+  language?: string | null;
+  isFavorite: boolean;
+  isPinned: boolean;
+  itemTypeId: string;
+  itemType?: {
+    id: string;
+    name: string;
+    slug: string;
+    icon: string;
+    color: string;
+  };
+  tags?: string[];
+  createdAt: string | Date;
+};
+
 interface ItemCardProps {
-  item: Item;
+  item: ItemCardData;
+}
+
+function formatDate(dateInput: Date | string): string {
+  if (typeof dateInput === "string" && !dateInput.includes("-") && !dateInput.includes("T")) {
+    return dateInput;
+  }
+  const date = new Date(dateInput);
+  if (isNaN(date.getTime())) return String(dateInput);
+  return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
 }
 
 export function ItemCard({ item }: ItemCardProps) {
+  const typeColor =
+    item.itemType?.color || itemTypes.find((t) => t.id === item.itemTypeId)?.color;
+  const leftBorderStyle = typeColor
+    ? { borderLeftColor: typeColor, borderLeftWidth: "3px" }
+    : undefined;
+
   return (
-    <div className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-border/50 bg-card/40 p-4 transition-all duration-200 hover:border-border hover:bg-card/70 hover:shadow-md">
+    <div
+      className="group relative flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border border-border/50 bg-card/40 p-4 transition-all duration-200 hover:border-border hover:bg-card/70 hover:shadow-md border-l-[3px]"
+      style={leftBorderStyle}
+    >
       <div className="flex items-start gap-3 min-w-0 flex-1">
         {/* Type Icon Container */}
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted/60 border border-border/40 group-hover:border-border/80 transition-colors">
-          <ItemTypeIcon typeId={item.itemTypeId} className="h-4 w-4" />
+          <ItemTypeIcon
+            typeId={item.itemTypeId}
+            slug={item.itemType?.slug}
+            iconName={item.itemType?.icon}
+            color={item.itemType?.color}
+            className="h-4 w-4"
+          />
         </div>
 
         {/* Title, Badges, Description, Tags */}
@@ -35,9 +84,11 @@ export function ItemCard({ item }: ItemCardProps) {
           </div>
 
           {/* Description */}
-          <p className="text-xs text-muted-foreground line-clamp-1">
-            {item.description}
-          </p>
+          {item.description && (
+            <p className="text-xs text-muted-foreground line-clamp-1">
+              {item.description}
+            </p>
+          )}
 
           {/* Content Preview (Snippet / Command / URL) if applicable */}
           {item.content && (
@@ -87,7 +138,7 @@ export function ItemCard({ item }: ItemCardProps) {
 
       {/* Far Right: Date */}
       <div className="text-xs text-muted-foreground/70 shrink-0 self-end sm:self-center font-medium">
-        {item.createdAt}
+        {formatDate(item.createdAt)}
       </div>
     </div>
   );

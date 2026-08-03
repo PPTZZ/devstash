@@ -61,7 +61,7 @@ export function Sidebar() {
   const recentCollections = collections.filter((c) => !c.isFavorite);
 
   const sidebarContent = (collapsed: boolean) => (
-    <div className="flex flex-col h-full justify-between select-none">
+    <div className="flex flex-col h-full min-h-0 justify-between select-none overflow-hidden">
       <div className="flex-1 overflow-y-auto py-2 space-y-4">
         {/* Item Types Section */}
         <div>
@@ -254,7 +254,7 @@ export function Sidebar() {
       {/* Desktop Collapsible Sidebar */}
       <aside
         className={cn(
-          "hidden md:flex flex-col border-r border-border/40 bg-background/95 transition-[width] duration-300 ease-in-out shrink-0",
+          "hidden md:flex flex-col border-r border-border/40 bg-background/95 transition-[width] duration-300 ease-in-out shrink-0 h-full overflow-hidden",
           isCollapsed ? "w-16 p-2" : "w-64 p-3"
         )}
       >

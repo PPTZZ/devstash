@@ -1,20 +1,19 @@
 import React from "react";
 import Link from "next/link";
 import { Pin, Clock } from "lucide-react";
-import { items } from "@/lib/mock-data";
 import { getDashboardCollections, getDashboardStats } from "@/lib/db/collections";
+import { getPinnedItems, getRecentItems } from "@/lib/db/items";
 import { StatsCards } from "@/components/dashboard/StatsCards";
 import { CollectionCard } from "@/components/dashboard/CollectionCard";
 import { ItemCard } from "@/components/dashboard/ItemCard";
 
 export default async function DashboardPage() {
-  const [collections, stats] = await Promise.all([
+  const [collections, stats, pinnedItems, recentItems] = await Promise.all([
     getDashboardCollections(6),
     getDashboardStats(),
+    getPinnedItems(),
+    getRecentItems(10),
   ]);
-
-  const pinnedItems = items.filter((item) => item.isPinned);
-  const recentItems = items.slice(0, 10);
 
   return (
     <div className="space-y-8 max-w-7xl mx-auto pb-10">
@@ -87,11 +86,17 @@ export default async function DashboardPage() {
           </h2>
         </div>
 
-        <div className="space-y-3">
-          {recentItems.map((item) => (
-            <ItemCard key={item.id} item={item} />
-          ))}
-        </div>
+        {recentItems.length === 0 ? (
+          <div className="rounded-xl border border-dashed border-border/60 bg-card/20 p-8 text-center">
+            <p className="text-sm text-muted-foreground">No recent items found in database.</p>
+          </div>
+        ) : (
+          <div className="space-y-3">
+            {recentItems.map((item) => (
+              <ItemCard key={item.id} item={item} />
+            ))}
+          </div>
+        )}
       </section>
     </div>
   );

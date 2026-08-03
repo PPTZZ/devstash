@@ -3,7 +3,7 @@
 
 ## Current Feature
 [//]: # (Feature name and short description)
-Dashboard Collections Spec - Replace dummy collection data on dashboard with real Neon database data via Prisma.
+Dashboard Items Spec - Replace dummy item data on dashboard with real Neon database data via Prisma.
 
 ## Status
 [//]: # (Not started | In Progress | Complete)
@@ -56,4 +56,10 @@ Complete
 - Created `lib/db/collections.ts` with `getDashboardCollections`, `getAllCollections`, and `getDashboardStats` functions.
 - Updated `app/dashboard/page.tsx` and `app/collections/page.tsx` to fetch collections & stats directly from database in Server Components.
 - Updated `CollectionCard.tsx` and `StatsCards.tsx` using `type` definitions and rendered dynamic border color from dominant item type.
+- Verified `npx tsc --noEmit`, `pnpm lint`, and `pnpm build` cleanly with 0 errors.
+- Added Dashboard Items Spec to `current-feature.md`.
+- Created and checked out new Git branch `feature/dashboard-items`.
+- Created `lib/db/items.ts` with `getPinnedItems` and `getRecentItems` database query functions.
+- Updated `ItemCard.tsx` to support DB `ItemWithDetails` schema, dynamic left border color derived from item type, and date formatting.
+- Updated `app/dashboard/page.tsx` to fetch pinned and recent items from Neon PostgreSQL via Prisma.
 - Verified `npx tsc --noEmit`, `pnpm lint`, and `pnpm build` cleanly with 0 errors.
