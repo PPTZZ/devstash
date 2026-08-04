@@ -16,10 +16,13 @@ import {
   Settings,
   X,
   ChevronDown,
+  ChevronRight,
   Layers,
   LucideProps,
 } from "lucide-react";
-import { itemTypes, collections, currentUser, ItemType } from "@/lib/mock-data";
+import { itemTypes as mockItemTypes, collections as mockCollections, currentUser } from "@/lib/mock-data";
+import { ItemTypeWithCount } from "@/lib/db/items";
+import { CollectionWithDetails } from "@/lib/db/collections";
 import { useSidebar } from "@/components/dashboard/SidebarContext";
 import { cn } from "@/lib/utils";
 
@@ -53,12 +56,29 @@ function getTypeRoute(slug: string): string {
   return `/items/${slug}s`;
 }
 
-export function Sidebar() {
+export type SidebarProps = {
+  itemTypes?: ItemTypeWithCount[];
+  favoriteCollections?: CollectionWithDetails[];
+  recentCollections?: CollectionWithDetails[];
+};
+
+export function Sidebar({
+  itemTypes: propItemTypes,
+  favoriteCollections: propFavorites,
+  recentCollections: propRecents,
+}: SidebarProps) {
   const pathname = usePathname();
   const { isCollapsed, isMobileOpen, closeMobileSidebar } = useSidebar();
 
-  const favoriteCollections = collections.filter((c) => c.isFavorite);
-  const recentCollections = collections.filter((c) => !c.isFavorite);
+  const rawItemTypes =
+    propItemTypes && propItemTypes.length > 0 ? propItemTypes : mockItemTypes;
+  const displayItemTypes = [...rawItemTypes].sort((a, b) =>
+    a.name.localeCompare(b.name)
+  );
+  const displayFavorites =
+    propFavorites ?? mockCollections.filter((c) => c.isFavorite);
+  const displayRecents =
+    propRecents ?? mockCollections.filter((c) => !c.isFavorite);
 
   const sidebarContent = (collapsed: boolean) => (
     <div className="flex flex-col h-full min-h-0 justify-between select-none overflow-hidden">
@@ -75,7 +95,7 @@ export function Sidebar() {
           )}
 
           <nav className="space-y-0.5 mt-1 px-1.5">
-            {itemTypes.map((type: ItemType) => {
+            {displayItemTypes.map((type) => {
               const route = getTypeRoute(type.slug);
               const isActive = pathname === route;
 
@@ -129,7 +149,7 @@ export function Sidebar() {
                 Favorites
               </div>
             )}
-            {favoriteCollections.map((col) => {
+            {displayFavorites.map((col) => {
               const route = `/collections/${col.id}`;
               const isActive = pathname === route;
 
@@ -163,10 +183,10 @@ export function Sidebar() {
           <div className="mt-3 space-y-0.5 px-1.5">
             {!collapsed && (
               <div className="px-3 py-1 text-[11px] font-semibold text-muted-foreground/70 uppercase tracking-wide">
-                All Collections
+                Recents
               </div>
             )}
-            {recentCollections.map((col) => {
+            {displayRecents.map((col) => {
               const route = `/collections/${col.id}`;
               const isActive = pathname === route;
 
@@ -189,14 +209,41 @@ export function Sidebar() {
                     {!collapsed && <span className="truncate">{col.name}</span>}
                   </div>
                   {!collapsed && (
-                    <span className="text-xs font-normal text-muted-foreground/80 tabular-nums">
-                      {col.itemCount}
-                    </span>
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span
+                        className="h-2 w-2 rounded-full shrink-0"
+                        style={{
+                          backgroundColor: col.dominantItemType?.color || "#6b7280",
+                        }}
+                        title={
+                          col.dominantItemType
+                            ? `Dominant type: ${col.dominantItemType.name}`
+                            : "Collection"
+                        }
+                      />
+                      <span className="text-xs font-normal text-muted-foreground/80 tabular-nums">
+                        {col.itemCount}
+                      </span>
+                    </div>
                   )}
                 </Link>
               );
             })}
           </div>
+
+          {/* View All Collections Link */}
+          {!collapsed && (
+            <div className="mt-2 px-1.5">
+              <Link
+                href="/collections"
+                onClick={closeMobileSidebar}
+                className="flex items-center justify-between px-3 py-1.5 text-xs font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-accent/40 group"
+              >
+                <span>View all collections</span>
+                <ChevronRight className="h-3.5 w-3.5 text-muted-foreground/60 group-hover:text-foreground transition-colors" />
+              </Link>
+            </div>
+          )}
         </div>
       </div>
 
@@ -297,3 +344,4 @@ export function Sidebar() {
     </>
   );
 }
+

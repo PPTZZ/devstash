@@ -24,6 +24,11 @@ export type Collection = {
   isFavorite: boolean;
   itemCount: number;
   itemTypeSlugs: string[];
+  dominantItemType?: {
+    slug: string;
+    name: string;
+    color: string;
+  };
   createdAt: string;
 };
 
@@ -56,42 +61,12 @@ export const currentUser: User = {
 
 export const itemTypes: ItemType[] = [
   {
-    id: 'type_snippet',
-    name: 'Snippets',
-    slug: 'snippet',
-    icon: 'Code',
-    color: '#3b82f6',
-    count: 24,
-    isSystem: true,
-    isProOnly: false,
-  },
-  {
-    id: 'type_prompt',
-    name: 'Prompts',
-    slug: 'prompt',
-    icon: 'Sparkles',
-    color: '#8b5cf6',
-    count: 18,
-    isSystem: true,
-    isProOnly: false,
-  },
-  {
     id: 'type_command',
     name: 'Commands',
     slug: 'command',
     icon: 'Terminal',
     color: '#f97316',
     count: 15,
-    isSystem: true,
-    isProOnly: false,
-  },
-  {
-    id: 'type_note',
-    name: 'Notes',
-    slug: 'note',
-    icon: 'StickyNote',
-    color: '#fde047',
-    count: 12,
     isSystem: true,
     isProOnly: false,
   },
@@ -122,6 +97,36 @@ export const itemTypes: ItemType[] = [
     icon: 'Link',
     color: '#10b981',
     count: 8,
+    isSystem: true,
+    isProOnly: false,
+  },
+  {
+    id: 'type_note',
+    name: 'Notes',
+    slug: 'note',
+    icon: 'StickyNote',
+    color: '#fde047',
+    count: 12,
+    isSystem: true,
+    isProOnly: false,
+  },
+  {
+    id: 'type_prompt',
+    name: 'Prompts',
+    slug: 'prompt',
+    icon: 'Sparkles',
+    color: '#8b5cf6',
+    count: 18,
+    isSystem: true,
+    isProOnly: false,
+  },
+  {
+    id: 'type_snippet',
+    name: 'Snippets',
+    slug: 'snippet',
+    icon: 'Code',
+    color: '#3b82f6',
+    count: 24,
     isSystem: true,
     isProOnly: false,
   },

@@ -117,3 +117,21 @@ export async function getDashboardStats(): Promise<DashboardStats> {
     favoriteCollections,
   };
 }
+
+/**
+ * Fetch collections formatted for the sidebar (separated into favorites and recents)
+ */
+export async function getSidebarCollections(): Promise<{
+  favorites: CollectionWithDetails[];
+  recents: CollectionWithDetails[];
+}> {
+  const allCollections = await getAllCollections();
+  const favorites = allCollections.filter((c) => c.isFavorite);
+  const recents = allCollections.filter((c) => !c.isFavorite);
+
+  return {
+    favorites,
+    recents,
+  };
+}
+

@@ -3,7 +3,7 @@
 
 ## Current Feature
 [//]: # (Feature name and short description)
-Dashboard Items Spec - Replace dummy item data on dashboard with real Neon database data via Prisma.
+Alphabetical Sidebar Item Types - Reorder item types in the sidebar to be listed in alphabetical order.
 
 ## Status
 [//]: # (Not started | In Progress | Complete)
@@ -63,3 +63,12 @@ Complete
 - Updated `ItemCard.tsx` to support DB `ItemWithDetails` schema, dynamic left border color derived from item type, and date formatting.
 - Updated `app/dashboard/page.tsx` to fetch pinned and recent items from Neon PostgreSQL via Prisma.
 - Verified `npx tsc --noEmit`, `pnpm lint`, and `pnpm build` cleanly with 0 errors.
+- Created and checked out new Git branch `feature/stats-sidebar`.
+- Added `getItemTypesWithCounts` and `getItemsByType` database query functions to `lib/db/items.ts`.
+- Added `getSidebarCollections` database query function to `lib/db/collections.ts`.
+- Updated `app/dashboard/layout.tsx` to asynchronously fetch system item types with item counts and sidebar collections from Neon PostgreSQL database.
+- Updated `components/dashboard/Sidebar.tsx` to render system item types with live item counts, favorite collections with star badges, recent collections with colored circle indicators for dominant item types, and a "View all collections" link pointing to `/collections`.
+- Updated `app/items/[type]/page.tsx` to fetch and display items by type dynamically from database.
+- Updated `lib/db/items.ts` `getItemTypesWithCounts` query to order system item types by `name: "asc"`.
+- Updated `components/dashboard/Sidebar.tsx` to sort displayed item types alphabetically by name.
+- Reordered `itemTypes` array in `lib/mock-data.ts` to be in alphabetical order (Commands, Files, Images, Links, Notes, Prompts, Snippets).
