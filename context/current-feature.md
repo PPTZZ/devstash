@@ -3,7 +3,7 @@
 
 ## Current Feature
 [//]: # (Feature name and short description)
-Alphabetical Sidebar Item Types - Reorder item types in the sidebar to be listed in alphabetical order.
+Delete Mock Data - Remove lib/mock-data.ts and refactor remaining components to fetch/render dynamic data without mock fallbacks.
 
 ## Status
 [//]: # (Not started | In Progress | Complete)
@@ -72,3 +72,7 @@ Complete
 - Updated `lib/db/items.ts` `getItemTypesWithCounts` query to order system item types by `name: "asc"`.
 - Updated `components/dashboard/Sidebar.tsx` to sort displayed item types alphabetically by name.
 - Reordered `itemTypes` array in `lib/mock-data.ts` to be in alphabetical order (Commands, Files, Images, Links, Notes, Prompts, Snippets).
+- Removed `lib/mock-data.ts` file.
+- Added `getCollectionById` database query to `lib/db/collections.ts` and updated `app/collections/[id]/page.tsx` to fetch collection from Neon PostgreSQL DB.
+- Refactored `ItemTypeIcon.tsx`, `ItemCard.tsx`, `Sidebar.tsx`, and `StatsCards.tsx` to eliminate mock-data dependencies.
+- Verified `pnpm lint` and `pnpm build` cleanly with 0 errors.

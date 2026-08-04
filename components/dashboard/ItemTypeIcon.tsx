@@ -9,7 +9,15 @@ import {
   Link as LinkIcon,
   LucideProps,
 } from "lucide-react";
-import { itemTypes } from "@/lib/mock-data";
+const SYSTEM_TYPE_DEFAULTS: Record<string, { icon: string; color: string }> = {
+  snippet: { icon: "Code", color: "#3b82f6" },
+  prompt: { icon: "Sparkles", color: "#8b5cf6" },
+  command: { icon: "Terminal", color: "#f97316" },
+  note: { icon: "StickyNote", color: "#fde047" },
+  file: { icon: "File", color: "#6b7280" },
+  image: { icon: "Image", color: "#ec4899" },
+  link: { icon: "Link", color: "#10b981" },
+};
 
 interface ItemTypeIconProps extends LucideProps {
   slug?: string;
@@ -20,21 +28,17 @@ interface ItemTypeIconProps extends LucideProps {
 
 export function ItemTypeIcon({
   slug,
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   typeId,
   iconName,
   color,
   className = "h-4 w-4",
   ...props
 }: ItemTypeIconProps) {
-  let matchedType;
-  if (slug) {
-    matchedType = itemTypes.find((t) => t.slug === slug);
-  } else if (typeId) {
-    matchedType = itemTypes.find((t) => t.id === typeId);
-  }
+  const matchedDefault = slug ? SYSTEM_TYPE_DEFAULTS[slug] : undefined;
 
-  const effectiveIcon = iconName || matchedType?.icon || "Code";
-  const effectiveColor = color || matchedType?.color || "#3b82f6";
+  const effectiveIcon = iconName || matchedDefault?.icon || "Code";
+  const effectiveColor = color || matchedDefault?.color || "#3b82f6";
 
   const iconProps = {
     className,

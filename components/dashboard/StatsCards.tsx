@@ -1,6 +1,5 @@
 import React from "react";
 import { FileText, Folder, Star, Bookmark } from "lucide-react";
-import { items as mockItems, collections as mockCollections } from "@/lib/mock-data";
 
 export type StatsData = {
   totalItems: number;
@@ -14,12 +13,10 @@ type StatsCardsProps = {
 };
 
 export function StatsCards({ stats }: StatsCardsProps) {
-  const totalItems = stats?.totalItems ?? mockItems.length;
-  const totalCollections = stats?.totalCollections ?? mockCollections.length;
-  const favoriteItems =
-    stats?.favoriteItems ?? mockItems.filter((i) => i.isFavorite).length;
-  const favoriteCollections =
-    stats?.favoriteCollections ?? mockCollections.filter((c) => c.isFavorite).length;
+  const totalItems = stats?.totalItems ?? 0;
+  const totalCollections = stats?.totalCollections ?? 0;
+  const favoriteItems = stats?.favoriteItems ?? 0;
+  const favoriteCollections = stats?.favoriteCollections ?? 0;
 
   const statItems = [
     {

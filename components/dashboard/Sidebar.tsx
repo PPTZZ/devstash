@@ -20,9 +20,9 @@ import {
   Layers,
   LucideProps,
 } from "lucide-react";
-import { itemTypes as mockItemTypes, collections as mockCollections, currentUser } from "@/lib/mock-data";
 import { ItemTypeWithCount } from "@/lib/db/items";
 import { CollectionWithDetails } from "@/lib/db/collections";
+import { UserDetails } from "@/lib/db/user";
 import { useSidebar } from "@/components/dashboard/SidebarContext";
 import { cn } from "@/lib/utils";
 
@@ -60,25 +60,24 @@ export type SidebarProps = {
   itemTypes?: ItemTypeWithCount[];
   favoriteCollections?: CollectionWithDetails[];
   recentCollections?: CollectionWithDetails[];
+  user?: UserDetails | null;
 };
 
 export function Sidebar({
   itemTypes: propItemTypes,
   favoriteCollections: propFavorites,
   recentCollections: propRecents,
+  user,
 }: SidebarProps) {
   const pathname = usePathname();
   const { isCollapsed, isMobileOpen, closeMobileSidebar } = useSidebar();
 
-  const rawItemTypes =
-    propItemTypes && propItemTypes.length > 0 ? propItemTypes : mockItemTypes;
+  const rawItemTypes = propItemTypes ?? [];
   const displayItemTypes = [...rawItemTypes].sort((a, b) =>
     a.name.localeCompare(b.name)
   );
-  const displayFavorites =
-    propFavorites ?? mockCollections.filter((c) => c.isFavorite);
-  const displayRecents =
-    propRecents ?? mockCollections.filter((c) => !c.isFavorite);
+  const displayFavorites = propFavorites ?? [];
+  const displayRecents = propRecents ?? [];
 
   const sidebarContent = (collapsed: boolean) => (
     <div className="flex flex-col h-full min-h-0 justify-between select-none overflow-hidden">
@@ -256,29 +255,33 @@ export function Sidebar({
           )}
         >
           <div className="flex items-center gap-3 min-w-0">
-            <div className="relative shrink-0">
-              {/* User Avatar */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={currentUser.image}
-                alt={currentUser.name}
-                className="h-8 w-8 rounded-full border border-border/60 object-cover"
-              />
-              {currentUser.isPro && (
-                <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-primary text-[8px] font-bold text-primary-foreground">
-                  ★
-                </span>
-              )}
-            </div>
-            {!collapsed && (
-              <div className="flex flex-col min-w-0">
-                <span className="text-sm font-semibold text-foreground truncate leading-tight">
-                  {currentUser.name}
-                </span>
-                <span className="text-xs text-muted-foreground truncate leading-tight">
-                  {currentUser.email}
-                </span>
-              </div>
+            {user && (
+              <>
+                <div className="relative shrink-0">
+                  {/* User Avatar */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={user.image}
+                    alt={user.name}
+                    className="h-8 w-8 rounded-full border border-border/60 object-cover"
+                  />
+                  {user.isPro && (
+                    <span className="absolute -top-1 -right-1 flex h-3.5 w-3.5 items-center justify-center rounded-full bg-primary text-[8px] font-bold text-primary-foreground">
+                      ★
+                    </span>
+                  )}
+                </div>
+                {!collapsed && (
+                  <div className="flex flex-col min-w-0">
+                    <span className="text-sm font-semibold text-foreground truncate leading-tight">
+                      {user.name}
+                    </span>
+                    <span className="text-xs text-muted-foreground truncate leading-tight">
+                      {user.email}
+                    </span>
+                  </div>
+                )}
+              </>
             )}
           </div>
 

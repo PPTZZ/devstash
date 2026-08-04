@@ -1,6 +1,5 @@
 import React from "react";
 import { Pin, Star, ExternalLink, FileText } from "lucide-react";
-import { itemTypes } from "@/lib/mock-data";
 import { ItemTypeIcon } from "@/components/dashboard/ItemTypeIcon";
 
 export type ItemCardData = {
@@ -42,8 +41,7 @@ function formatDate(dateInput: Date | string): string {
 }
 
 export function ItemCard({ item }: ItemCardProps) {
-  const typeColor =
-    item.itemType?.color || itemTypes.find((t) => t.id === item.itemTypeId)?.color;
+  const typeColor = item.itemType?.color || "#3b82f6";
   const leftBorderStyle = typeColor
     ? { borderLeftColor: typeColor, borderLeftWidth: "3px" }
     : undefined;

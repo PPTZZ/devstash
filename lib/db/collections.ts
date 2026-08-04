@@ -135,3 +135,62 @@ export async function getSidebarCollections(): Promise<{
   };
 }
 
+/**
+ * Fetch a single collection by ID from database
+ */
+export async function getCollectionById(id: string): Promise<CollectionWithDetails | null> {
+  const col = await db.collection.findUnique({
+    where: { id },
+    include: {
+      items: {
+        include: {
+          item: {
+            include: {
+              itemType: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  if (!col) return null;
+
+  const typeCounts: Record<
+    string,
+    { slug: string; name: string; icon: string; color: string; count: number }
+  > = {};
+
+  col.items.forEach(({ item }) => {
+    if (item && item.itemType) {
+      const { slug, name, icon, color } = item.itemType;
+      if (!typeCounts[slug]) {
+        typeCounts[slug] = { slug, name, icon, color, count: 0 };
+      }
+      typeCounts[slug].count += 1;
+    }
+  });
+
+  const itemTypesList = Object.values(typeCounts);
+  let dominantType: { slug: string; name: string; color: string } | undefined = undefined;
+  let maxCount = 0;
+
+  itemTypesList.forEach((t) => {
+    if (t.count > maxCount) {
+      maxCount = t.count;
+      dominantType = { slug: t.slug, name: t.name, color: t.color };
+    }
+  });
+
+  return {
+    id: col.id,
+    name: col.name,
+    description: col.description,
+    isFavorite: col.isFavorite,
+    itemCount: col.items.length,
+    itemTypes: itemTypesList,
+    dominantItemType: dominantType,
+    createdAt: col.createdAt,
+  };
+}
+
