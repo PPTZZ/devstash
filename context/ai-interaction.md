@@ -18,16 +18,22 @@ This is the common workflow that we will use for every single feature/fix:
 4. **Test** - Verify it works in the browser. Implement unit testing later. Run `pnpm run build` and fix any errors
 5. **Iterate** - Iterate and change things if needed
 6. **Commit** - Only after build passes and everything works
-7. **Merge** - Merge to main
+7. **Merge** - Merge to master
 8. **Delete Branch** - Delete branch after merge
 9. **Review** - Review AI-generated code periodically and on demand.
 10. Mark as completed in @context/current-feature.md and add to history
 
 Do NOT commit without permission and until the build passes. If build fails, fix the issues first.
 
+### Feature Action Commands
+
+When given a command in the format `feature <action>` (e.g. `feature load <file.md>`):
+- Execute **ONLY** the specific steps designated for that action (e.g. `feature load` only documents the spec in `@context/current-feature.md`, sets status to `Not started`, and checks out the feature branch).
+- **DO NOT** automatically proceed to subsequent workflow steps (such as code implementation, testing, or committing) unless explicitly commanded by the user.
+
 ## Branching
 
-We will create a new branch for every feature/fix. Name branch **feature/[feature]** or **fix[fix]**, etc. Ask to delete the branch once merged.
+We will create a new branch for every feature/fix. Name branch **feature/[feature]** or **fix/[fix]**, etc. Ask to delete the branch once merged.
 
 ## Commits
 

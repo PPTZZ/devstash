@@ -25,6 +25,7 @@ import { CollectionWithDetails } from "@/lib/db/collections";
 import { UserDetails } from "@/lib/db/user";
 import { useSidebar } from "@/components/dashboard/SidebarContext";
 import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge";
 
 function getItemTypeIcon(iconName: string, color: string, props: LucideProps) {
   const iconProps = { ...props, style: { color } };
@@ -97,6 +98,14 @@ export function Sidebar({
             {displayItemTypes.map((type) => {
               const route = getTypeRoute(type.slug);
               const isActive = pathname === route;
+              const isPro =
+                type.isProOnly ||
+                type.slug === "file" ||
+                type.slug === "files" ||
+                type.slug === "image" ||
+                type.slug === "images" ||
+                type.name.toLowerCase() === "files" ||
+                type.name.toLowerCase() === "images";
 
               return (
                 <Link
@@ -112,13 +121,25 @@ export function Sidebar({
                       : "text-muted-foreground"
                   )}
                 >
-                  <div className={cn("flex items-center gap-3", collapsed && "justify-center")}>
+                  <div className={cn("flex items-center gap-2.5 min-w-0", collapsed && "justify-center")}>
                     {getItemTypeIcon(type.icon, type.color, { className: "h-4 w-4 shrink-0" })}
-                    {!collapsed && <span>{type.name}</span>}
+                    {!collapsed && (
+                      <div className="flex items-center gap-1.5 min-w-0">
+                        <span className="truncate">{type.name}</span>
+                        {isPro && (
+                          <Badge
+                            variant="pro"
+                            className="px-1.5 py-0 text-[9px] font-bold uppercase tracking-wider leading-tight shrink-0"
+                          >
+                            PRO
+                          </Badge>
+                        )}
+                      </div>
+                    )}
                   </div>
 
                   {!collapsed && (
-                    <span className="text-xs font-normal text-muted-foreground/80 tabular-nums">
+                    <span className="text-xs font-normal text-muted-foreground/80 tabular-nums shrink-0 ml-2">
                       {type.count}
                     </span>
                   )}

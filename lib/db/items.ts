@@ -128,6 +128,7 @@ export type ItemTypeWithCount = {
   slug: string;
   icon: string;
   color: string;
+  isProOnly?: boolean;
   count: number;
 };
 
@@ -157,6 +158,7 @@ export async function getItemTypesWithCounts(userId?: string): Promise<ItemTypeW
     slug: t.slug,
     icon: t.icon,
     color: t.color,
+    isProOnly: t.isProOnly,
     count: t._count.items,
   }));
 }

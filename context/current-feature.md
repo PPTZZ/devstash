@@ -1,9 +1,9 @@
 [//]: # (Never delete the section titles or the comments that explain each section.)
-[//]: # (After the status is changed to complete leave only the Current Feature, Status and History sections populated. The content Goals and the Notes can be cleard excepting the descriptive comments.)
+[//]: # (After the status is changed to complete leave only the Current Feature, Status and History sections populated. The content Goals and the Notes can be cleared excepting the descriptive comments.)
 
 ## Current Feature
 [//]: # (Feature name and short description)
-Delete Mock Data - Remove lib/mock-data.ts and refactor remaining components to fetch/render dynamic data without mock fallbacks.
+Add Pro Badge to Sidebar - Add a clean, subtle uppercase PRO badge using ShadCN UI badge component to Files and Images item types in the sidebar.
 
 ## Status
 [//]: # (Not started | In Progress | Complete)
@@ -75,4 +75,9 @@ Complete
 - Removed `lib/mock-data.ts` file.
 - Added `getCollectionById` database query to `lib/db/collections.ts` and updated `app/collections/[id]/page.tsx` to fetch collection from Neon PostgreSQL DB.
 - Refactored `ItemTypeIcon.tsx`, `ItemCard.tsx`, `Sidebar.tsx`, and `StatsCards.tsx` to eliminate mock-data dependencies.
+- Verified `pnpm lint` and `pnpm build` cleanly with 0 errors.
+- Loaded feature spec `context/features/add-pro-badge-sidebar.md` and checked out feature branch `feature/add-pro-badge-sidebar`.
+- Created ShadCN UI `Badge` component in `components/ui/badge.tsx`.
+- Updated `lib/db/items.ts` `getItemTypesWithCounts` query to include `isProOnly`.
+- Updated `components/dashboard/Sidebar.tsx` to render clean, subtle uppercase `PRO` badge for Files and Images item types.
 - Verified `pnpm lint` and `pnpm build` cleanly with 0 errors.
