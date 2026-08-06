@@ -11,7 +11,10 @@ export type SidebarUserProfileProps = {
   collapsed: boolean;
 };
 
-export function SidebarUserProfile({ user, collapsed }: SidebarUserProfileProps) {
+export const SidebarUserProfile = React.memo(function SidebarUserProfile({
+  user,
+  collapsed,
+}: SidebarUserProfileProps) {
   if (!user) return null;
 
   return (
@@ -68,4 +71,7 @@ export function SidebarUserProfile({ user, collapsed }: SidebarUserProfileProps)
       </div>
     </div>
   );
-}
+});
+
+SidebarUserProfile.displayName = "SidebarUserProfile";
+

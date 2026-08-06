@@ -14,7 +14,7 @@ export type SidebarCollectionsProps = {
   collapsed: boolean;
 };
 
-export function SidebarCollections({
+export const SidebarCollections = React.memo(function SidebarCollections({
   favoriteCollections,
   recentCollections,
   collapsed,
@@ -137,4 +137,7 @@ export function SidebarCollections({
       )}
     </div>
   );
-}
+});
+
+SidebarCollections.displayName = "SidebarCollections";
+

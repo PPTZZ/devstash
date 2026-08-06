@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -53,12 +53,16 @@ export type SidebarItemTypesProps = {
   collapsed: boolean;
 };
 
-export function SidebarItemTypes({ itemTypes, collapsed }: SidebarItemTypesProps) {
+export const SidebarItemTypes = React.memo(function SidebarItemTypes({
+  itemTypes,
+  collapsed,
+}: SidebarItemTypesProps) {
   const pathname = usePathname();
   const { closeMobileSidebar } = useSidebar();
 
-  const displayItemTypes = [...itemTypes].sort((a, b) =>
-    a.name.localeCompare(b.name)
+  const displayItemTypes = useMemo(
+    () => [...itemTypes].sort((a, b) => a.name.localeCompare(b.name)),
+    [itemTypes]
   );
 
   return (
@@ -76,14 +80,7 @@ export function SidebarItemTypes({ itemTypes, collapsed }: SidebarItemTypesProps
         {displayItemTypes.map((type) => {
           const route = getTypeRoute(type.slug);
           const isActive = pathname === route;
-          const isPro =
-            type.isProOnly ||
-            type.slug === "file" ||
-            type.slug === "files" ||
-            type.slug === "image" ||
-            type.slug === "images" ||
-            type.name.toLowerCase() === "files" ||
-            type.name.toLowerCase() === "images";
+          const isPro = type.isProOnly;
 
           return (
             <Link
@@ -127,4 +124,7 @@ export function SidebarItemTypes({ itemTypes, collapsed }: SidebarItemTypesProps
       </nav>
     </div>
   );
-}
+});
+
+SidebarItemTypes.displayName = "SidebarItemTypes";
+
