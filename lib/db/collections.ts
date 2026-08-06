@@ -28,6 +28,77 @@ export type DashboardStats = {
   favoriteCollections: number;
 };
 
+const collectionIncludeConfig = {
+  items: {
+    select: {
+      item: {
+        select: {
+          itemType: true,
+        },
+      },
+    },
+  },
+};
+
+type CollectionQueryResult = {
+  id: string;
+  name: string;
+  description: string | null;
+  isFavorite: boolean;
+  createdAt: Date;
+  items?: Array<{
+    item?: {
+      itemType?: {
+        slug: string;
+        name: string;
+        icon: string;
+        color: string;
+      } | null;
+    } | null;
+  }>;
+};
+
+function mapToCollectionWithDetails(col: CollectionQueryResult): CollectionWithDetails {
+  const typeCounts: Record<
+    string,
+    { slug: string; name: string; icon: string; color: string; count: number }
+  > = {};
+
+  col.items?.forEach(({ item }) => {
+    if (item && item.itemType) {
+      const { slug, name, icon, color } = item.itemType;
+      if (!typeCounts[slug]) {
+        typeCounts[slug] = { slug, name, icon, color, count: 0 };
+      }
+      typeCounts[slug].count += 1;
+    }
+  });
+
+  const itemTypesList = Object.values(typeCounts);
+
+  // Find dominant item type (most-used type in this collection)
+  let dominantType: { slug: string; name: string; color: string } | undefined = undefined;
+  let maxCount = 0;
+
+  itemTypesList.forEach((t) => {
+    if (t.count > maxCount) {
+      maxCount = t.count;
+      dominantType = { slug: t.slug, name: t.name, color: t.color };
+    }
+  });
+
+  return {
+    id: col.id,
+    name: col.name,
+    description: col.description,
+    isFavorite: col.isFavorite,
+    itemCount: col.items?.length ?? 0,
+    itemTypes: itemTypesList,
+    dominantItemType: dominantType,
+    createdAt: col.createdAt,
+  };
+}
+
 /**
  * Fetch recent collections with item counts, unique item types, and dominant type color
  */
@@ -37,59 +108,10 @@ export async function getDashboardCollections(limit: number = 6): Promise<Collec
     orderBy: {
       createdAt: "desc",
     },
-    include: {
-      items: {
-        include: {
-          item: {
-            include: {
-              itemType: true,
-            },
-          },
-        },
-      },
-    },
+    include: collectionIncludeConfig,
   });
 
-  return collections.map((col) => {
-    const typeCounts: Record<
-      string,
-      { slug: string; name: string; icon: string; color: string; count: number }
-    > = {};
-
-    col.items.forEach(({ item }) => {
-      if (item && item.itemType) {
-        const { slug, name, icon, color } = item.itemType;
-        if (!typeCounts[slug]) {
-          typeCounts[slug] = { slug, name, icon, color, count: 0 };
-        }
-        typeCounts[slug].count += 1;
-      }
-    });
-
-    const itemTypesList = Object.values(typeCounts);
-
-    // Find dominant item type (most-used type in this collection)
-    let dominantType: { slug: string; name: string; color: string } | undefined = undefined;
-    let maxCount = 0;
-
-    itemTypesList.forEach((t) => {
-      if (t.count > maxCount) {
-        maxCount = t.count;
-        dominantType = { slug: t.slug, name: t.name, color: t.color };
-      }
-    });
-
-    return {
-      id: col.id,
-      name: col.name,
-      description: col.description,
-      isFavorite: col.isFavorite,
-      itemCount: col.items.length,
-      itemTypes: itemTypesList,
-      dominantItemType: dominantType,
-      createdAt: col.createdAt,
-    };
-  });
+  return collections.map(mapToCollectionWithDetails);
 }
 
 /**
@@ -121,17 +143,31 @@ export async function getDashboardStats(): Promise<DashboardStats> {
 /**
  * Fetch collections formatted for the sidebar (separated into favorites and recents)
  */
-export async function getSidebarCollections(): Promise<{
+export async function getSidebarCollections(userId?: string): Promise<{
   favorites: CollectionWithDetails[];
   recents: CollectionWithDetails[];
 }> {
-  const allCollections = await getAllCollections();
-  const favorites = allCollections.filter((c) => c.isFavorite);
-  const recents = allCollections.filter((c) => !c.isFavorite);
+  const whereFavorite = userId ? { userId, isFavorite: true } : { isFavorite: true };
+  const whereRecent = userId ? { userId, isFavorite: false } : { isFavorite: false };
+
+  const [favoriteRecords, recentRecords] = await Promise.all([
+    db.collection.findMany({
+      where: whereFavorite,
+      take: 10,
+      orderBy: { createdAt: "desc" },
+      include: collectionIncludeConfig,
+    }),
+    db.collection.findMany({
+      where: whereRecent,
+      take: 10,
+      orderBy: { createdAt: "desc" },
+      include: collectionIncludeConfig,
+    }),
+  ]);
 
   return {
-    favorites,
-    recents,
+    favorites: favoriteRecords.map(mapToCollectionWithDetails),
+    recents: recentRecords.map(mapToCollectionWithDetails),
   };
 }
 
@@ -141,56 +177,11 @@ export async function getSidebarCollections(): Promise<{
 export async function getCollectionById(id: string): Promise<CollectionWithDetails | null> {
   const col = await db.collection.findUnique({
     where: { id },
-    include: {
-      items: {
-        include: {
-          item: {
-            include: {
-              itemType: true,
-            },
-          },
-        },
-      },
-    },
+    include: collectionIncludeConfig,
   });
 
   if (!col) return null;
-
-  const typeCounts: Record<
-    string,
-    { slug: string; name: string; icon: string; color: string; count: number }
-  > = {};
-
-  col.items.forEach(({ item }) => {
-    if (item && item.itemType) {
-      const { slug, name, icon, color } = item.itemType;
-      if (!typeCounts[slug]) {
-        typeCounts[slug] = { slug, name, icon, color, count: 0 };
-      }
-      typeCounts[slug].count += 1;
-    }
-  });
-
-  const itemTypesList = Object.values(typeCounts);
-  let dominantType: { slug: string; name: string; color: string } | undefined = undefined;
-  let maxCount = 0;
-
-  itemTypesList.forEach((t) => {
-    if (t.count > maxCount) {
-      maxCount = t.count;
-      dominantType = { slug: t.slug, name: t.name, color: t.color };
-    }
-  });
-
-  return {
-    id: col.id,
-    name: col.name,
-    description: col.description,
-    isFavorite: col.isFavorite,
-    itemCount: col.items.length,
-    itemTypes: itemTypesList,
-    dominantItemType: dominantType,
-    createdAt: col.createdAt,
-  };
+  return mapToCollectionWithDetails(col);
 }
+
 

@@ -154,6 +154,7 @@ model Collection {
   updatedAt     DateTime @updatedAt
 
   @@index([userId])
+  @@index([userId, isFavorite])
 }
 
 model ItemCollection {

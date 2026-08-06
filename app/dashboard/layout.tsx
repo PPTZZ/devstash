@@ -11,10 +11,10 @@ export default async function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const [itemTypes, sidebarCollections, user] = await Promise.all([
-    getItemTypesWithCounts(),
-    getSidebarCollections(),
-    getCurrentUser(),
+  const user = await getCurrentUser();
+  const [itemTypes, sidebarCollections] = await Promise.all([
+    getItemTypesWithCounts(user?.id),
+    getSidebarCollections(user?.id),
   ]);
 
   return (

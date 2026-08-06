@@ -2,21 +2,21 @@
 [//]: # (After the status is changed to complete leave only the Current Feature, Status and History sections populated. The content Goals and the Notes can be cleared excepting the descriptive comments.)
 
 ## Current Feature
-[//]: # (Feature name and short description)
-Add Pro Badge to Sidebar - Add a clean, subtle uppercase PRO badge using ShadCN UI badge component to Files and Images item types in the sidebar.
+Codebase Quick Wins: DB Query Optimization & Sidebar Modularization (Issues 1, 2 & 4)
 
 ## Status
-[//]: # (Not started | In Progress | Complete)
 Complete
 
 ## Goals
-[//]: # (Goals and requirements)
+1. **Issue 1 (Prisma Over-Fetching)**: Optimize collection database query payloads in `lib/db/collections.ts` by replacing heavy nested item joins with lean projections and `_count` aggregations.
+2. **Issue 2 (Sidebar Indexing & User Scoping)**: Add composite index `@@index([userId, isFavorite])` to `Collection` in `prisma/schema.prisma` and add `userId` scoping to `getSidebarCollections`.
+3. **Issue 4 (Sidebar Refactoring & Modularization)**: Decompose monolithic 372-line `Sidebar.tsx` into clean, modular sub-components in `components/dashboard/sidebar/` (`SidebarItemTypes.tsx`, `SidebarCollections.tsx`, `SidebarUserProfile.tsx`, `SidebarMobileDrawer.tsx`).
 
 ## Notes
-[//]: # (Any extra notes)
+- Ensure zero regression in sidebar collapse states, badge rendering, icon colors, and mobile drawer interactions.
+- Run `pnpm lint` and `pnpm build` verification after changes.
 
 ## History
-[//]: # (Keep this updated. Earliest to latest)
 - Switched to `feature/dashboard-ui-phase-2` branch.
 - Implemented `SidebarContext` provider to handle responsive sidebar states (collapsible desktop view and overlay mobile drawer).
 - Updated `TopBar` to toggle sidebar state on `PanelLeft` button click.
@@ -81,3 +81,10 @@ Complete
 - Updated `lib/db/items.ts` `getItemTypesWithCounts` query to include `isProOnly`.
 - Updated `components/dashboard/Sidebar.tsx` to render clean, subtle uppercase `PRO` badge for Files and Images item types.
 - Verified `pnpm lint` and `pnpm build` cleanly with 0 errors.
+- Created and checked out feature branch `feature/quick-wins-db-sidebar`.
+- Added composite index `@@index([userId, isFavorite])` to `Collection` model in `prisma/schema.prisma` and generated Prisma Client.
+- Optimized `collectionIncludeConfig` in `lib/db/collections.ts` with lean field selection and added `userId` parameter to `getSidebarCollections`.
+- Decomposed monolithic `Sidebar.tsx` (372 lines) into 4 modular sub-components in `components/dashboard/sidebar/` (`SidebarItemTypes.tsx`, `SidebarCollections.tsx`, `SidebarUserProfile.tsx`, `SidebarMobileDrawer.tsx`).
+- Verified `pnpm lint` and `pnpm build` cleanly with 0 errors.
+
+
