@@ -2,11 +2,14 @@
 [//]: # (After the status is changed to complete leave only the Current Feature, Status and History sections populated. The content Goals and the Notes can be cleared excepting the descriptive comments.)
 
 ## Current Feature
-Auth Setup - NextAuth + GitHub Provider
+Auth Credentials - Email/Password Provider
 
 ## Status
 Complete
 
+## Goals
+
+## Notes
 
 ## History
 - Switched to `feature/dashboard-ui-phase-2` branch.
@@ -93,3 +96,9 @@ Complete
 - Created NextAuth route handler in `app/api/auth/[...nextauth]/route.ts`.
 - Extended Session type with `user.id` in `types/next-auth.d.ts`.
 - Verified `pnpm lint` and `pnpm build` cleanly with 0 errors.
+- Checked out feature branch `feature/auth-phase-2`.
+- Configured Credentials provider in `auth.config.ts` (Edge-compatible placeholder) and `auth.ts` (overridden with `bcryptjs` password verification against `db.user`).
+- Configured JWT and session callbacks in `auth.ts` to attach `user.id` to the session.
+- Created user registration API endpoint at `POST /api/auth/register` with validation, duplicate email check, and 12-round bcrypt password hashing.
+- Migrated deprecated `middleware.ts` to `proxy.ts` adhering to Next.js 16 conventions.
+- Verified credentials authentication and registration flows; passed `pnpm lint` and `pnpm build` with 0 errors.

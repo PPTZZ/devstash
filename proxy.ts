@@ -3,7 +3,7 @@ import authConfig from "./auth.config";
 
 const { auth } = NextAuth(authConfig);
 
-export const proxy = auth(async function proxy(req) {
+export default auth(async function proxy(req) {
   const { pathname } = req.nextUrl;
 
   const isDashboard = pathname.startsWith("/dashboard");
