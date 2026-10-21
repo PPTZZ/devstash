@@ -2,7 +2,7 @@
 [//]: # (After the status is changed to complete leave only the Current Feature, Status and History sections populated. The content Goals and the Notes can be cleared excepting the descriptive comments.)
 
 ## Current Feature
-Auth Credentials - Email/Password Provider
+Auth UI - Sign In, Register & Sign Out
 
 ## Status
 Complete
@@ -102,3 +102,11 @@ Complete
 - Created user registration API endpoint at `POST /api/auth/register` with validation, duplicate email check, and 12-round bcrypt password hashing.
 - Migrated deprecated `middleware.ts` to `proxy.ts` adhering to Next.js 16 conventions.
 - Verified credentials authentication and registration flows; passed `pnpm lint` and `pnpm build` with 0 errors.
+- Loaded feature spec `context/features/auth-phase-3-spec.md` and checked out feature branch `feature/auth-phase-3`.
+- Configured NextAuth custom sign-in page (`pages: { signIn: "/sign-in" }`) in `auth.config.ts` and updated unauthenticated `/dashboard` redirect in `proxy.ts`.
+- Updated `getCurrentUser` in `lib/db/user.ts` to resolve the authenticated session via `auth()` and preserve `image: null` when no OAuth image exists.
+- Created reusable `UserAvatar` and `getInitials` component in `components/ui/user-avatar.tsx` handling GitHub profile images and initials fallback.
+- Built custom Sign In page in `app/sign-in/page.tsx` with email/password fields, GitHub sign-in button, `/register` link, and form validation/error display.
+- Built custom Register page in `app/register/page.tsx` with name, email, password, and confirm password fields, validation, submission to `/api/auth/register`, and redirect to `/sign-in`.
+- Updated `SidebarUserProfile.tsx` with `UserAvatar`, user name/email display, avatar click dropup menu with "Sign out", and `/profile` icon link.
+- Verified `pnpm lint` and `pnpm build` cleanly with 0 errors.

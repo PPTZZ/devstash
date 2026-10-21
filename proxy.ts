@@ -9,7 +9,7 @@ export default auth(async function proxy(req) {
   const isDashboard = pathname.startsWith("/dashboard");
 
   if (isDashboard && !req.auth) {
-    const newUrl = new URL("/api/auth/signin", req.nextUrl.origin);
+    const newUrl = new URL("/sign-in", req.nextUrl.origin);
     newUrl.searchParams.set("callbackUrl", req.nextUrl.href);
     return Response.redirect(newUrl);
   }
